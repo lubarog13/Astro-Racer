@@ -48,7 +48,7 @@ public class SpaceConroller : MonoBehaviour
         }
         while (stars.Count < starCount)
         {
-            Vector3 randomPosition = new Vector3(Random.Range(centerX, centerX + radius), Random.Range(centerY - radius, centerY + radius), Random.Range(centerZ - radius, centerZ + radius));
+            Vector3 randomPosition = new Vector3(Random.Range(centerX - radius, centerX + radius), Random.Range(centerY, centerY + radius), Random.Range(centerZ - radius, centerZ + radius));
             if (Vector3.Distance(randomPosition, new Vector3(centerX, centerY, centerZ)) > 5) {
                 GameObject star = Instantiate(starPrefab, randomPosition, Quaternion.identity);
                 stars.Add(star);

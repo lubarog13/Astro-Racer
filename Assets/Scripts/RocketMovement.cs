@@ -19,7 +19,7 @@ public class RocketMovement : MonoBehaviour
     void Start()
     {
         _charController = GetComponent<CharacterController>();
-        _charController.enableOverlapRecovery = true;
+                // _charController.enableOverlapRecovery = true;
         temperature = 0f;
     }
 
@@ -30,19 +30,21 @@ public class RocketMovement : MonoBehaviour
         float vertical = Input.GetAxis("Vertical");
         float horizontal = Input.GetAxis("Horizontal");
         float zdirection = Input.GetAxis("Jump");
-        if (horizontal < 0 && speed < 200f)
+        // if (horizontal < 0 && speed < 200f)
+        // {
+        //     speed += Mathf.Abs(horizontal) * 0.3f;
+        // } 
+        // if (horizontal > 0 && speed > 1f)
+        // {
+        //     speed -= Mathf.Abs(horizontal) * 0.1f;
+        // } 
+        movement.y = 1f;
+
+        if(horizontal != 0 || vertical != 0 || zdirection!=0 || isAngleChanged)
         {
-            speed += Mathf.Abs(horizontal) * 0.3f;
-        } 
-        if (horizontal > 0 && speed > 1f)
-        {
-            speed -= Mathf.Abs(horizontal) * 0.1f;
-        } 
-        movement.x = 1f;
-        if(vertical != 0 || zdirection!=0 || isAngleChanged)
-        {
+            movement.y = -1 * horizontal;
             movement.z = vertical;
-            movement.y = zdirection;
+            movement.x = zdirection;
             if (isAngleChanged)
             {
                 transform.rotation = Quaternion.Euler(0, 0, angle);
@@ -65,6 +67,7 @@ public class RocketMovement : MonoBehaviour
             halfSecondTimer = 0f;
         }
          movement = movement.normalized * speed * Time.deltaTime;
+         
             _charController.Move(movement);
         halfSecondTimer += Time.deltaTime;
         twoSecondTimer += Time.deltaTime;
