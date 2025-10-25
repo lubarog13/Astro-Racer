@@ -10,7 +10,7 @@ public class VolumetricFire : MonoBehaviour
     private Material material;
 
     [SerializeField, Range(1, 20), Tooltip("Controls the number of additional meshes to render in front of and behind the original mesh")]
-    private int thickness = 1;
+    public int thickness = 1;
     [SerializeField, Range(0.01f,1f), Tooltip("Controls the total distance between the frontmost mesh and the backmost mesh")]
     private float spread = 0.2f;
 

@@ -6,11 +6,15 @@ public class RocketMovement : MonoBehaviour
     [SerializeField] Transform target;
     [SerializeField] float speed = 10f;
     [SerializeField] UIController uiController;
+    [SerializeField] VolumetricFire volumetricFire;
+
     private ControllerColliderHit _contact;
     private CharacterController _charController;
     private float angle = 0f;
     private bool isAngleChanged = false;
-    public float temperature = 0f;
+    private float temperature = 0f;
+    private float twoSecondTimer = 0f;
+    private float halfSecondTimer = 0f;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -26,34 +30,65 @@ public class RocketMovement : MonoBehaviour
         float vertical = Input.GetAxis("Vertical");
         float horizontal = Input.GetAxis("Horizontal");
         float zdirection = Input.GetAxis("Jump");
-        if (Input.GetKeyDown(KeyCode.A) && speed < 50f)
+        if (horizontal < 0 && speed < 200f)
         {
-            speed += 3f;
+            speed += Mathf.Abs(horizontal) * 0.3f;
         } 
-        if (Input.GetKeyDown(KeyCode.D) && speed > 0f)
+        if (horizontal > 0 && speed > 1f)
         {
-            speed -= 3f;
+            speed -= Mathf.Abs(horizontal) * 0.1f;
         } 
-        if(vertical != 0 || horizontal < 0 || zdirection!=0 || isAngleChanged)
+        movement.x = 1f;
+        if(vertical != 0 || zdirection!=0 || isAngleChanged)
         {
             movement.z = vertical;
-            movement.x = -horizontal;
             movement.y = zdirection;
             if (isAngleChanged)
             {
                 transform.rotation = Quaternion.Euler(0, 0, angle);
                 isAngleChanged = false;
             }
-            movement = movement.normalized * speed * Time.deltaTime;
-            _charController.Move(movement);
+           
+            
+            volumetricFire.thickness += Mathf.Max(1, (int)(speed * 0.01f));
+            if (volumetricFire.thickness > 20) {
+                volumetricFire.thickness = 20;
+            }
             // angle = Mathf.Atan2(movement.x, movement.z) * Mathf.Rad2Deg;
             // transform.rotation = Quaternion.Euler(0, angle, 0);
+        } 
+        else if (volumetricFire.thickness > 0 && halfSecondTimer >= 0.5f) {
+            volumetricFire.thickness -= 3;
+            if (volumetricFire.thickness < 1) {
+                volumetricFire.thickness = 1;
+            }
+            halfSecondTimer = 0f;
         }
-        temperature -= 5f;
-        if (temperature < 0f) {
-            temperature = 0f;
+         movement = movement.normalized * speed * Time.deltaTime;
+            _charController.Move(movement);
+        halfSecondTimer += Time.deltaTime;
+        twoSecondTimer += Time.deltaTime;
+        if (twoSecondTimer >= 2f)
+        {
+            // Change temperature every 2 seconds, for example by +10
+            if (temperature > 0) {
+                SetTemperature(temperature - 5f);
+                uiController.ChangeProgressBarValue(-5f);
+            }
+            twoSecondTimer = 0f;
         }
-        uiController.ChangeProgressBarValue(-5f);
         
+        
+    }
+
+    public float GetTemperature()
+    {
+        return temperature;
+    }
+
+    public void SetTemperature(float value)
+    {
+        Debug.Log("SetTemperature: " + value);
+        temperature = value;
     }
 }

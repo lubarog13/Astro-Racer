@@ -6,7 +6,6 @@ using UnityProgressBar;
 public class UIController : MonoBehaviour
 {
     [SerializeField] private ProgressBar progressBar;
-    [SerializeField] private float progressValue = 0f;
     [SerializeField] private TextMeshProUGUI textMeshProUGUI;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -17,7 +16,7 @@ public class UIController : MonoBehaviour
     // Update is called once per frame
     public void ChangeProgressBarValue(float value)
     {
-        progressBar.Value += value * 0.1f;
+        progressBar.Value += value * 0.01f;
         if (progressBar.Value >= 1f )
         {
             progressBar.Value = 1f;
@@ -26,6 +25,6 @@ public class UIController : MonoBehaviour
         {
             progressBar.Value = 0f;
         }
-        textMeshProUGUI.text = progressBar.Value.ToString("F2") + "%";
+        textMeshProUGUI.text = (progressBar.Value * 100f).ToString("F2") + "%";
     }
 }
