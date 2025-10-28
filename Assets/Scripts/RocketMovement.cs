@@ -26,23 +26,25 @@ public class RocketMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!uiController.IsGameActive()) {
+            return;
+        }
         Vector3 movement = Vector3.zero;
         float vertical = Input.GetAxis("Vertical");
         float horizontal = Input.GetAxis("Horizontal");
         float zdirection = Input.GetAxis("Jump");
-        // if (horizontal < 0 && speed < 200f)
-        // {
-        //     speed += Mathf.Abs(horizontal) * 0.3f;
-        // } 
-        // if (horizontal > 0 && speed > 1f)
-        // {
-        //     speed -= Mathf.Abs(horizontal) * 0.1f;
-        // } 
+        if (horizontal < 0 && speed < 200f)
+        {
+            speed += Mathf.Abs(horizontal) * 0.3f;
+        } 
+        if (horizontal > 0 && speed > 1f)
+        {
+            speed -= Mathf.Abs(horizontal) * 0.1f;
+        } 
         movement.y = 1f;
 
         if(horizontal != 0 || vertical != 0 || zdirection!=0 || isAngleChanged)
         {
-            movement.y = -1 * horizontal;
             movement.z = vertical;
             movement.x = zdirection;
             if (isAngleChanged)
@@ -91,7 +93,16 @@ public class RocketMovement : MonoBehaviour
 
     public void SetTemperature(float value)
     {
-        Debug.Log("SetTemperature: " + value);
         temperature = value;
+        if (temperature > 100f) {
+            speed = 10f;
+            volumetricFire.thickness = 1;
+            uiController.ShowGameOver();
+            temperature = 0f;
+            return;
+        }
+        if (temperature < 0f) {
+            temperature = 0f;
+        }
     }
 }

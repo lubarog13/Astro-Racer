@@ -7,6 +7,8 @@ public class UIController : MonoBehaviour
 {
     [SerializeField] private ProgressBar progressBar;
     [SerializeField] private TextMeshProUGUI textMeshProUGUI;
+    [SerializeField] private GameObject gameOverPanel;
+    private bool isGameActive = true;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -26,5 +28,22 @@ public class UIController : MonoBehaviour
             progressBar.Value = 0f;
         }
         textMeshProUGUI.text = (progressBar.Value * 100f).ToString("F2") + "%";
+    }
+
+    public void ShowGameOver()
+    {
+        isGameActive = false;
+        gameOverPanel.SetActive(true);
+    }
+    public void CloseGameOverPanel()
+    {
+        gameOverPanel.SetActive(false);
+        ChangeProgressBarValue(-100f);
+        isGameActive = true;
+    }
+
+    public bool IsGameActive()
+    {
+        return isGameActive;
     }
 }
