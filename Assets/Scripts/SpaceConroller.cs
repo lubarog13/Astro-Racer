@@ -59,7 +59,7 @@ public class SpaceConroller : MonoBehaviour
             if (Vector3.Distance(randomPosition, new Vector3(centerX, centerY, centerZ)) > 5) {
                 GameObject star = Instantiate(starPrefab, randomPosition, Quaternion.identity);
                 float scale = Random.Range(0.5f, 3f);
-                star.transform.localScale = new Vector3(scale, scale, scale);
+                star.transform.localScale = new Vector3(scale, scale, scale*0.2f);
                 stars.Add(star);
             }
         }
