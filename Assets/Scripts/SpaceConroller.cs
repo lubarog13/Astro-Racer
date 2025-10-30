@@ -8,13 +8,17 @@ public class SpaceConroller : MonoBehaviour
     [SerializeField] GameObject ceresPrefab;
     [SerializeField] GameObject marsPrefab;
     [SerializeField] GameObject venusPrefab;
+    [SerializeField] GameObject bigPlanetPrefab;
     [SerializeField] int planetCount = 40;
     [SerializeField] List<GameObject> planets = new List<GameObject>();
+    [SerializeField] int bigPlanetCount = 2;
     List<GameObject> stars = new List<GameObject>();
+    GameObject bigPlanet;
     private float centerX = 0f;
     private float centerY = 0f;
     private float centerZ = 0f;
     private float radius = 100f;
+    private float bigPlanetRadius = 100f;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -75,6 +79,11 @@ public class SpaceConroller : MonoBehaviour
                 planetsNotInRadius.Add(planet);
             }
         }
+         if (Vector3.Distance(bigPlanet.transform.position, new Vector3(centerX, centerY, centerZ)) > bigPlanetRadius)
+            {
+                Destroy(bigPlanet);
+                bigPlanet = null;
+            }
         foreach (GameObject planet in planetsNotInRadius)
         {
             Destroy(planet);
@@ -91,6 +100,14 @@ public class SpaceConroller : MonoBehaviour
                 planet.GetComponent<PlanetMovement>().SetSpeed(Random.Range(5f, 25f));
                 planets.Add(planet);
             }
+        }
+        if (bigPlanet == null) {
+        {
+            Vector3 randomPosition = new Vector3(Random.Range(centerX - 2, centerX + 2), centerY + 30f, Random.Range(centerZ - 2, centerZ + 2));
+            bigPlanet = Instantiate(bigPlanetPrefab, randomPosition, Quaternion.identity);
+            float scale = Random.Range(3f, 10f);
+            bigPlanet.transform.localScale = new Vector3(scale, scale, scale);
+            bigPlanetRadius = Random.Range(100f, 200f);
         }
     }
 
