@@ -15,6 +15,7 @@ public class RocketMovement : MonoBehaviour
     private float temperature = 0f;
     private float twoSecondTimer = 0f;
     private float halfSecondTimer = 0f;
+    private float rotateAngle = 0f;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -42,6 +43,8 @@ public class RocketMovement : MonoBehaviour
             speed -= Mathf.Abs(horizontal) * 0.1f;
         } 
         movement.y = 1f;
+        rotateAngle -= Time.deltaTime * 10f;
+        rotateAngle = Mathf.Max(rotateAngle, 0f);
 
         if(horizontal != 0 || vertical != 0 || zdirection!=0 || isAngleChanged)
         {
@@ -73,6 +76,8 @@ public class RocketMovement : MonoBehaviour
             _charController.Move(movement);
         halfSecondTimer += Time.deltaTime;
         twoSecondTimer += Time.deltaTime;
+        // rotateAngle += Time.deltaTime * 10f;
+        // transform.rotation = Quaternion.Euler(0, rotateAngle, 0);
         if (twoSecondTimer >= 2f)
         {
             // Change temperature every 2 seconds, for example by +10
@@ -104,5 +109,11 @@ public class RocketMovement : MonoBehaviour
         if (temperature < 0f) {
             temperature = 0f;
         }
+    }
+
+    public void SetRotateAngle(float value)
+    {
+        Debug.Log("SetRotateAngle: " + value);
+        rotateAngle = value;
     }
 }

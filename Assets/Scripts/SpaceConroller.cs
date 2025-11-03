@@ -11,9 +11,8 @@ public class SpaceConroller : MonoBehaviour
     [SerializeField] GameObject bigPlanetPrefab;
     [SerializeField] int planetCount = 40;
     [SerializeField] List<GameObject> planets = new List<GameObject>();
-    [SerializeField] int bigPlanetCount = 2;
     List<GameObject> stars = new List<GameObject>();
-    GameObject bigPlanet;
+    GameObject bigPlanet = null;
     private float centerX = 0f;
     private float centerY = 0f;
     private float centerZ = 0f;
@@ -79,7 +78,7 @@ public class SpaceConroller : MonoBehaviour
                 planetsNotInRadius.Add(planet);
             }
         }
-         if (Vector3.Distance(bigPlanet.transform.position, new Vector3(centerX, centerY, centerZ)) > bigPlanetRadius)
+         if (bigPlanet != null && Vector3.Distance(bigPlanet.transform.position, new Vector3(centerX, centerY, centerZ)) > bigPlanetRadius)
             {
                 Destroy(bigPlanet);
                 bigPlanet = null;
@@ -102,10 +101,9 @@ public class SpaceConroller : MonoBehaviour
             }
         }
         if (bigPlanet == null) {
-        {
-            Vector3 randomPosition = new Vector3(Random.Range(centerX - 2, centerX + 2), centerY + 30f, Random.Range(centerZ - 2, centerZ + 2));
+            Vector3 randomPosition = new Vector3(centerX, centerY + 30f, centerZ);
             bigPlanet = Instantiate(bigPlanetPrefab, randomPosition, Quaternion.identity);
-            float scale = Random.Range(3f, 10f);
+            float scale = Random.Range(10f, 30f);
             bigPlanet.transform.localScale = new Vector3(scale, scale, scale);
             bigPlanetRadius = Random.Range(100f, 200f);
         }
