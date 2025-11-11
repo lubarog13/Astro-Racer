@@ -10,7 +10,11 @@ public class SpaceConroller : MonoBehaviour
     [SerializeField] GameObject venusPrefab;
     [SerializeField] GameObject bigPlanetPrefab;
     [SerializeField] int planetCount = 40;
+    [SerializeField] UIController uiController;
     [SerializeField] List<GameObject> planets = new List<GameObject>();
+    [SerializeField] GameObject starColliderPrefab;
+    [SerializeField] GameObject starExplosionPrefab;
+
     List<GameObject> stars = new List<GameObject>();
     GameObject bigPlanet = null;
     private float centerX = 0f;
@@ -59,10 +63,12 @@ public class SpaceConroller : MonoBehaviour
         while (stars.Count < starCount)
         {
             Vector3 randomPosition = new Vector3(Random.Range(centerX - radius, centerX + radius), Random.Range(centerY, centerY + radius), Random.Range(centerZ - radius, centerZ + radius));
-            if (Vector3.Distance(randomPosition, new Vector3(centerX, centerY, centerZ)) > 5) {
+            if (Vector3.Distance(randomPosition, new Vector3(centerX, centerY, centerZ)) > 15) {
                 GameObject star = Instantiate(starPrefab, randomPosition, Quaternion.identity);
                 float scale = Random.Range(0.5f, 3f);
-                star.transform.localScale = new Vector3(scale, scale, scale*0.2f);
+                star.transform.localScale = new Vector3(scale, scale, scale);
+                star.GetComponent<StarCollide>().explosionPrefab = starExplosionPrefab;
+                star.GetComponent<StarCollide>().colliderPrefab = starColliderPrefab;
                 stars.Add(star);
             }
         }
@@ -97,6 +103,7 @@ public class SpaceConroller : MonoBehaviour
                 float scale = Random.Range(0.5f, 3f);
                 planet.transform.localScale = new Vector3(scale, scale, scale);
                 planet.GetComponent<PlanetMovement>().SetSpeed(Random.Range(5f, 25f));
+                planet.GetComponent<PlanetMovement>().uiController = uiController;
                 planets.Add(planet);
             }
         }

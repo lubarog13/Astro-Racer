@@ -5,7 +5,7 @@ public class PlanetMovement : MonoBehaviour
     [SerializeField] float speed = 10f;
     [SerializeField] float minDirectionChangeInterval = 1f;
     [SerializeField] float maxDirectionChangeInterval = 4f;
-    [SerializeField] UIController uiController;
+    [SerializeField] public UIController uiController;
     
     private Rigidbody rb;
     private Vector3 currentDirection;
@@ -26,7 +26,7 @@ public class PlanetMovement : MonoBehaviour
     
     void Update()
     {
-        if (rb == null) return;
+        if (rb == null || uiController.IsStartPanelActive()) return;
         
         if (Time.time >= nextDirectionChangeTime)
         {

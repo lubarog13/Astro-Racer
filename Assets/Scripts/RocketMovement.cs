@@ -27,7 +27,7 @@ public class RocketMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!uiController.IsGameActive()) {
+        if (!uiController.IsGameActive() || uiController.IsStartPanelActive()) {
             return;
         }
         Vector3 movement = Vector3.zero;
@@ -48,13 +48,8 @@ public class RocketMovement : MonoBehaviour
 
         if(horizontal != 0 || vertical != 0 || zdirection!=0 || isAngleChanged)
         {
-            movement.z = vertical;
+            movement.z = -vertical;
             movement.x = zdirection;
-            if (isAngleChanged)
-            {
-                transform.rotation = Quaternion.Euler(0, 0, angle);
-                isAngleChanged = false;
-            }
            
             
             volumetricFire.thickness += Mathf.Max(1, (int)(speed * 0.01f));
@@ -82,8 +77,7 @@ public class RocketMovement : MonoBehaviour
         {
             // Change temperature every 2 seconds, for example by +10
             if (temperature > 0) {
-                SetTemperature(temperature - 5f);
-                uiController.ChangeProgressBarValue(-5f);
+                SetTemperature(-5f);
             }
             twoSecondTimer = 0f;
         }
@@ -98,22 +92,16 @@ public class RocketMovement : MonoBehaviour
 
     public void SetTemperature(float value)
     {
-        temperature = value;
+        temperature += value;
+        uiController.ChangeProgressBarValue(value);
         if (temperature > 100f) {
             speed = 10f;
             volumetricFire.thickness = 1;
-            uiController.ShowGameOver();
             temperature = 0f;
             return;
         }
         if (temperature < 0f) {
             temperature = 0f;
         }
-    }
-
-    public void SetRotateAngle(float value)
-    {
-        Debug.Log("SetRotateAngle: " + value);
-        rotateAngle = value;
     }
 }
